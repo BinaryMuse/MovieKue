@@ -1,0 +1,11 @@
+{
+  "default": {
+    "moviedb": {
+      "api_key": "--insert themoviedb.org API key here--"
+    }
+  },
+  "development": {
+  },
+  "production": {
+  }
+}

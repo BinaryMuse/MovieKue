@@ -1,0 +1,21 @@
+{
+  "name": "moviekue",
+  "version": "0.0.0",
+  "description": "Tutorial AngularJS application",
+  "main": "index.coffee",
+  "repository": "https://github.com/BinaryMuse/MovieKue.git",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brandon Tilley <brandon@brandontilley.com>",
+  "license": "MIT",
+  "dependencies": {
+    "coffee-script": "~1.6.3",
+    "express": "~3.3.4",
+    "node-sass": "~0.6.2",
+    "coffee-middleware": "~0.2.0",
+    "extend": "~1.1.3",
+    "request": "~2.25.0"
+  },
+  "private": true
+}

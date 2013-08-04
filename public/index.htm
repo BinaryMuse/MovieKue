@@ -1,0 +1,46 @@
+<!doctype html>
+<html ng-app="moviekue">
+<head>
+  <base href="/">
+  <title>MovieKue</title>
+  <link rel="stylesheet" type="text/css" href="/css/moviekue.css">
+  <script type="text/javascript" src="https://cdn.firebase.com/v0/firebase.js"></script>
+  <script type="text/javascript" src="/js/angular.js"></script>
+  <script type="text/javascript" src="/js/moviekue.js"></script>
+</head>
+<body>
+<div ng-controller="FullPageController" mk-background-image="image"></div>
+
+<div class='main'>
+  <div class="row header">
+    <div class="large-5 columns logo-container">
+      <a href="/">
+        <img src="http://placehold.it/360x100&text=MovieKue">
+      </a>
+    </div>
+    <div class="large-4 columns header-search">
+      <div class="search-box-wrapper">
+        <input type="search" placeholder="Search...">
+        <img src="/img/icons/reel.jpg" class="icon">
+      </div>
+    </div>
+    <div class="large-3 columns header-account">
+      <div>
+        <p>Brandon Tilley &middot; <a href="#">Logout</a></p>
+        <p><a href="#">22 movies in your Kue</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div ng-controller="RoutingController">
+    <div ng-hide="routingError">
+      <div ng-view></div>
+    </div>
+    <div ng-show="routingError">
+      <div ng-include="'/error.htm'"></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

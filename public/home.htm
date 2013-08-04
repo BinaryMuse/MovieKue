@@ -1,0 +1,14 @@
+<div ng-repeat="(key, collection) in sections">
+  <div class="row">
+    <div class="large-12 columns">
+      <h2>{{collection.title}}</h2>
+    </div>
+  </div>
+  <div class="row poster">
+    <div class="large-2 column poster" ng-repeat="movie in collection.movies | limitTo:6">
+      <a ng-href="/movie/{{movie.id}}-{{movie.title | slugify}}">
+        <img ng-src="{{posterImage(movie)}}">
+      </a>
+    </div>
+  </div>
+</div>

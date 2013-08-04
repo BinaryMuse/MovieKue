@@ -1,0 +1,31 @@
+<div class="row movie-details">
+  <div class="large-12 column main-details-block">
+    <img class="poster" ng-src="{{posterImage(movie)}}" width="154">
+    <div>
+      <h2>{{movie.title}}</h2>
+      <h4 class='subheader'>{{movie.tagline}}</h4>
+      <ul class="inline-list">
+        <li ng-show="movie.runtime">{{movie.runtime}} minutes</li>
+        <li ng-repeat="genre in movie.genres">
+          <a ng-href="/genre/{{genre.id}}-{{genre.name | slugify}}">{{genre.name}}</a>
+        </li>
+      </ul>
+      <p>{{movie.overview}}</p>
+    </div>
+  </div>
+
+  <div ng-show="movie.casts.cast">
+    <div class="large-12 column">
+      <h2>Cast</h2>
+    </div>
+
+    <ul class="large-block-grid-2 cast-list">
+      <li ng-repeat="member in movie.casts.cast | orderBy:'order'">
+        <a ng-href="/profile/{{member.id}}-{{member.name | slugify}}">
+          <img class="profile" ng-src="{{profileImage(member)}}">
+        </a>
+        <h3><a href="/profile/{{member.id}}">{{member.name}}</a></h3>
+        <h4 class='subheader'>{{member.character}}</h4>
+      </li>
+    </ul>
+</div>
