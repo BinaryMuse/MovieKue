@@ -11,6 +11,10 @@
         </li>
       </ul>
       <p>{{movie.overview}}</p>
+      <p ng-show="movie.belongs_to_collection">
+        Part of: <a ng-href="/collections/{{movie.belongs_to_collection.id}}-{{movie.belongs_to_collection.name | slugify}}">{{movie.belongs_to_collection.name}}<br>
+        <img ng-src="{{posterImage(movie.belongs_to_collection)}}" ng-show="movie.belongs_to_collection.poster_path"></a>
+      </p>
     </div>
   </div>
 
@@ -28,4 +32,16 @@
         <h4 class='subheader'>{{member.character}}</h4>
       </li>
     </ul>
+  </div>
+
+  <div ng-show="movie.similar_movies">
+      <div class="large-12 columns">
+        <h2>Similar Movies</h2>
+      </div>
+      <div class="large-2 column poster" ng-repeat="movie in movie.similar_movies.results | limitTo:6 | orderBy:'popularity'">
+        <a ng-href="/movie/{{movie.id}}-{{movie.title | slugify}}">
+          <img ng-src="{{posterImage(movie)}}">
+        </a>
+      </div>
+    </div>
 </div>
