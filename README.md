@@ -3,6 +3,8 @@ MovieKue
 
 MovieKue is an AngularJS web application designed to teach AngularJS application design and programming. Eventually a screencast series will cover building the site.
 
+![MovieKue](media/moviekue-ss-dev-place.png)
+
 Installing
 ----------
 
