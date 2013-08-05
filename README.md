@@ -10,5 +10,5 @@ Installing
 
  * `npm install`
  * `cp config/config.json.example config/config.json`
- * Edit `config/config.json` to include your [TMBd API key](http://www.themoviedb.org/faq/api)
+ * Edit `config/config.json` to include your [TMDb API key](http://www.themoviedb.org/faq/api)
  * Start the server with `./node_modules/.bin/cake server` (or `cake server` if you have CoffeeScript installed globally)
