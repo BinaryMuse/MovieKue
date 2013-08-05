@@ -47,7 +47,7 @@ app.get "/moviedb/*", (req, res) ->
   uri.search = null # override since we want `query` to supercede
   uri.query ?= {}
   # TODO: unify app.get(...) and environment variables
-  uri.query.api_key = app.get('config').moviedb.api_key || process.node.env['THEMOVIEDB_API_KEY']
+  uri.query.api_key = app.get('config')?.moviedb?.api_key || process.node.env['THEMOVIEDB_API_KEY']
   headers =
     "Accept": "application/json"
   request(url: uri.format(), headers: headers).pipe(res)
