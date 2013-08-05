@@ -54,13 +54,19 @@ app.controller "IndexController", ($scope, homepageSections) ->
   $scope.sections = homepageSections
 
   $scope.posterImage = (record) ->
-    "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w154#{record.poster_path}"
+    if record.poster_path
+      "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w154#{record.poster_path}"
+    else
+      "/img/anon-movie.jpg"
 
 app.controller "MovieController", ($scope, $rootScope, movie) ->
   $scope.movie = movie.data
 
   $scope.posterImage = (record) ->
-    "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w154#{record.poster_path}"
+    if record.poster_path
+      "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w154#{record.poster_path}"
+    else
+      "/img/anon-movie.jpg"
 
   $scope.backdropImage = (record) ->
     "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w1280#{record.backdrop_path}"
