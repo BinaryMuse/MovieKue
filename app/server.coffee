@@ -5,6 +5,7 @@ express = require 'express'
 extend = require 'extend'
 request = require 'request'
 assets = require './middleware/assets'
+errors = require './middleware/errors'
 configuration = require './configuration'
 
 app = express()
@@ -17,6 +18,7 @@ publicPath = path.join rootPath, "public"
 app.set "config", configuration("../config/config.json", "default", app.get("env"))
 app.set "port", process.env.PORT || 3000
 
+app.use errors()
 app.use express.favicon()
 app.use express.logger("dev")
 app.use express.bodyParser()
