@@ -11,8 +11,8 @@
         </li>
       </ul>
       <p>{{movie.overview}}</p>
-      <p ng-show="movie.belongs_to_collection">
-        Part of: <a ng-href="/collections/{{movie.belongs_to_collection.id}}-{{movie.belongs_to_collection.name | slugify}}">{{movie.belongs_to_collection.name}}<br>
+      <p ng-if="movie.belongs_to_collection">
+        Part of: <a ng-href="/collection/{{movie.belongs_to_collection.id}}-{{movie.belongs_to_collection.name | slugify}}">{{movie.belongs_to_collection.name}}<br>
         <img ng-src="{{posterImage(movie.belongs_to_collection)}}" ng-show="movie.belongs_to_collection.poster_path"></a>
       </p>
     </div>
@@ -34,7 +34,7 @@
     </ul>
   </div>
 
-  <div ng-show="movie.similar_movies">
+  <div ng-if="movie.similar_movies.length">
       <div class="large-12 columns">
         <h2>Similar Movies</h2>
       </div>

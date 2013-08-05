@@ -8,7 +8,7 @@
   <script type="text/javascript" src="/js/angular.js"></script>
   <script type="text/javascript" src="/js/moviekue.js"></script>
 </head>
-<body>
+<body ng-cloak>
 <div ng-controller="FullPageController" mk-background-image="image" class='full-page-background'></div>
 
 <div class='main'>
@@ -18,10 +18,12 @@
         <img src="http://placehold.it/360x100&text=MovieKue">
       </a>
     </div>
-    <div class="large-4 columns header-search">
+    <div class="large-4 columns header-search" ng-controller="SearchController">
       <div class="search-box-wrapper">
-        <input type="search" placeholder="Search...">
-        <img src="/img/icons/reel.jpg" class="icon">
+        <form ng-submit="search()">
+          <input type="search" placeholder="Search..." ng-model="query">
+          <img src="/img/icons/reel.jpg" class="icon">
+        </form>
       </div>
     </div>
     <div class="large-3 columns header-account">

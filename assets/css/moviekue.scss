@@ -20,6 +20,14 @@ html, body {
   padding-left: 0;
 }
 
+img.poster {
+  width: 154px;
+}
+
+img.profile {
+  width: 150px;
+}
+
 .header-search {
   height: 100px;
   position: relative;
@@ -28,6 +36,10 @@ html, body {
     position: absolute;
     bottom: 0;
     width: 100%;
+  }
+
+  form {
+    margin: 0;
   }
 
   input {
@@ -98,7 +110,6 @@ html, body {
   img.poster {
     margin-top: 1.2em;
     margin-right: 0.8em;
-    width: 154px;
     float: right;
   }
 

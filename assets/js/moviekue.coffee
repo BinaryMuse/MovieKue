@@ -10,7 +10,17 @@ app.config ($routeProvider, $locationProvider) ->
     templateUrl: "/movie.htm"
     resolve:
       movie: ($route, MovieDB) ->
-        MovieDB("/movie/#{$route.current.params.id}?append_to_response=trailers,similar_movies,casts")
+        MovieDB.get("/movie/#{$route.current.params.id}?append_to_response=trailers,similar_movies,casts")
+  $routeProvider.when "/search/*query",
+    controller: "SearchResultsController"
+    templateUrl: "/search.htm"
+    resolve:
+      movieSearch: ($route, MovieDB) ->
+        MovieDB.get("/search/movie?query=#{$route.current.params.query}")
+      collectionSearch: ($route, MovieDB) ->
+        MovieDB.get("/search/collection?query=#{$route.current.params.query}")
+      personSearch: ($route, MovieDB) ->
+        MovieDB.get("/search/person?query=#{$route.current.params.query}")
   $routeProvider.otherwise
     controller: "RoutingController"
     templateUrl: "/error.htm"
@@ -23,7 +33,25 @@ app.controller "RoutingController", ($scope) ->
 
 app.factory 'MovieDB', ($http) ->
   cache = {}
-  (url) ->
+  posterImage: (img) ->
+    if img
+      "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w154#{img}"
+    else
+      "/img/anon-movie.jpg"
+
+  backdropImage: (img) ->
+    if img
+      "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w1280#{img}"
+    else
+      ""
+
+  profileImage: (img) ->
+    if img
+      "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w185#{img}"
+    else
+      "/img/anon.png"
+
+  get: (url) ->
     url = "/moviedb#{url}"
     if cache[url]
       cache[url]
@@ -45,37 +73,28 @@ app.factory 'homepageSections', (MovieDB) ->
   for key, section of sections
     do (section) ->
       section.movies = []
-      MovieDB(section.url).success (data) ->
+      MovieDB.get(section.url).success (data) ->
         angular.copy(data.results, section.movies)
 
   sections
 
-app.controller "IndexController", ($scope, homepageSections) ->
+app.controller "IndexController", ($scope, homepageSections, MovieDB) ->
   $scope.sections = homepageSections
 
   $scope.posterImage = (record) ->
-    if record.poster_path
-      "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w154#{record.poster_path}"
-    else
-      "/img/anon-movie.jpg"
+    MovieDB.posterImage(record.poster_path)
 
-app.controller "MovieController", ($scope, $rootScope, movie) ->
+app.controller "MovieController", ($scope, $rootScope, movie, MovieDB) ->
   $scope.movie = movie.data
 
   $scope.posterImage = (record) ->
-    if record.poster_path
-      "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w154#{record.poster_path}"
-    else
-      "/img/anon-movie.jpg"
+    MovieDB.posterImage(record.poster_path)
 
   $scope.backdropImage = (record) ->
-    "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w1280#{record.backdrop_path}"
+    MovieDB.backdropImage(record.backdrop_path)
 
   $scope.profileImage = (record) ->
-    if record.profile_path
-      "http://d3gtl9l2a4fn1j.cloudfront.net/t/p/w185#{record.profile_path}"
-    else
-      "/img/anon.png"
+    MovieDB.profileImage(record.profile_path)
 
   $rootScope.$broadcast 'setFullPageImage', $scope.backdropImage($scope.movie)
 
@@ -88,13 +107,31 @@ app.controller "FullPageController", ($scope) ->
   $scope.$on 'removeFullPageImage', ->
     $scope.image = null
 
-app.directive 'mkBackgroundImage', ->
+app.controller "SearchController", ($scope, $location) ->
+  $scope.search = ->
+    $location.url("/search/#{$scope.query}")
+
+app.controller "SearchResultsController", ($scope, movieSearch, collectionSearch, personSearch, MovieDB) ->
+  $scope.movieSearch = movieSearch.data
+  $scope.collectionSearch = collectionSearch.data
+  $scope.personSearch = personSearch.data
+
+  for fn in ['posterImage', 'profileImage']
+    $scope[fn] = MovieDB[fn]
+
+app.directive 'mkBackgroundImage', ($route, $rootScope) ->
   link: (scope, elem, attrs) ->
-    scope.$watch attrs.mkBackgroundImage, (value) ->
-      if value
+    handler = ->
+      value = scope[attrs.mkBackgroundImage]
+      if $route.current == undefined
+        elem.css('background-image': "none")
+      else if value
         elem.css('background-image': "url(#{value})")
       else
         elem.css('background-image': 'url(/img/curtain-bg.jpg)')
+
+    scope.$watch attrs.mkBackgroundImage, handler
+    scope.$on '$routeChangeSuccess', handler
 
 app.filter 'slugify', ->
   (str) ->

@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="large-12 columns" ng-show="collectionSearch.results.length">
+    <h2>Collections</h2>
+  </div>
+  <div class="large-12 columns">
+    <ul class="large-block-grid-6">
+      <li ng-repeat="collection in collectionSearch.results">
+        <a ng-href="/collection/{{collection.id}}-{{collection.name | slugify}}">
+          <img ng-src="{{posterImage(collection.poster_path)}}" class="poster">
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="large-12 columns" ng-show="movieSearch.results.length">
+    <h2>Movies</h2>
+  </div>
+  <div class="large-12 columns">
+    <ul class="large-block-grid-6">
+      <li ng-repeat="movie in movieSearch.results">
+        <a ng-href="/movie/{{movie.id}}-{{movie.title | slugify}}">
+          <img ng-src="{{posterImage(movie.poster_path)}}" class="poster">
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="large-12 columns" ng-show="personSearch.results.length">
+    <h2>People</h2>
+  </div>
+  <div class="large-12 columns">
+    <ul class="large-block-grid-6">
+      <li ng-repeat="person in personSearch.results">
+        <a ng-href="/profile/{{person.id}}-{{person.name | slugify}}">
+          <img ng-src="{{profileImage(person.profile_path)}}" class="poster">
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
