@@ -93,10 +93,8 @@ app.directive 'mkBackgroundImage', ->
     scope.$watch attrs.mkBackgroundImage, (value) ->
       if value
         elem.css('background-image': "url(#{value})")
-        elem.addClass('full-page-background')
       else
-        elem.css('background-image': 'none')
-        elem.removeClass('full-page-background')
+        elem.css('background-image': 'url(/img/curtain-bg.jpg)')
 
 app.filter 'slugify', ->
   (str) ->
