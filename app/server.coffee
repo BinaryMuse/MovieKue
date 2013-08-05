@@ -46,7 +46,8 @@ app.get "/moviedb/*", (req, res) ->
   uri.pathname = uri.pathname.replace(/^\/moviedb/, "/3")
   uri.search = null # override since we want `query` to supercede
   uri.query ?= {}
-  uri.query.api_key = app.get('config').moviedb.api_key
+  # TODO: unify app.get(...) and environment variables
+  uri.query.api_key = app.get('config').moviedb.api_key || process.node.env['THEMOVIEDB_API_KEY']
   headers =
     "Accept": "application/json"
   request(url: uri.format(), headers: headers).pipe(res)
