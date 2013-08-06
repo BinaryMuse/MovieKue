@@ -15,7 +15,7 @@ rootPath = path.resolve(".")
 assetPath = path.join rootPath, "assets"
 publicPath = path.join rootPath, "public"
 
-app.set "config", configuration("../config/config.json", "default", app.get("env"))
+app.set "config", configuration("./config/config.json", "default", app.get("env"))
 app.set "port", process.env.PORT || 3000
 
 app.use errors()
