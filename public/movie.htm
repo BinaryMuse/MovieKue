@@ -35,13 +35,16 @@
   </div>
 
   <div ng-if="movie.similar_movies.results.length">
-      <div class="large-12 columns">
-        <h2>Similar Movies</h2>
-      </div>
-      <div class="large-2 column poster" ng-repeat="movie in movie.similar_movies.results | limitTo:6 | orderBy:'popularity'">
+    <div class="large-12 columns">
+      <h2>Similar Movies</h2>
+    </div>
+    <div class="large-12 columns">
+      <ul class="large-block-grid-6">
+      <li ng-repeat="movie in movie.similar_movies.results | limitTo:6 | orderBy:'popularity'">
         <a ng-href="/movie/{{movie.id}}-{{movie.title | slugify}}">
           <img ng-src="{{posterImage(movie)}}">
         </a>
-      </div>
-    </div>
+      </li>
+    </ul>
+  </div>
 </div>
