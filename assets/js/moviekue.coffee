@@ -32,10 +32,16 @@ app.config ($routeProvider, $locationProvider) ->
     templateUrl: "/error.htm"
 
 app.controller "RoutingController", ($scope) ->
+  $scope.$on '$routeChangeStart', ->
+    $scope.routingProgress = true
+
   $scope.$on '$routeChangeError', ->
     $scope.routingError = true
+    $scope.routingProgress = false
+
   $scope.$on '$routeChangeSuccess', ->
     $scope.routingError = false
+    $scope.routingProgress = false
 
 app.factory 'MovieDB', ($http) ->
   cache = {}
@@ -139,13 +145,17 @@ app.controller "SearchResultsController", ($scope, movieSearch, collectionSearch
 app.directive 'mkBackgroundImage', ($route, $rootScope) ->
   link: (scope, elem, attrs) ->
     handler = ->
+      firstRoute = true
       value = scope[attrs.mkBackgroundImage]
-      if $route.current == undefined
+
+      if $route.current == undefined && firstRoute
         elem.css('background-image': "none")
       else if value
         elem.css('background-image': "url(#{value})")
+        firstRoute = false
       else
         elem.css('background-image': 'url(/img/curtain-bg.jpg)')
+        firstRoute = false
 
     scope.$watch attrs.mkBackgroundImage, handler
     scope.$on '$routeChangeSuccess', handler

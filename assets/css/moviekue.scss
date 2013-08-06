@@ -134,3 +134,11 @@ img.profile {
     }
   }
 }
+
+.ajax-loader-container {
+  text-align: center;
+
+  .ajax-loader {
+    padding: 100px;
+  }
+}
