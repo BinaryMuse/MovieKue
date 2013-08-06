@@ -11,6 +11,12 @@ app.config ($routeProvider, $locationProvider) ->
     resolve:
       movie: ($route, MovieDB) ->
         MovieDB.get("/movie/#{$route.current.params.id}?append_to_response=trailers,similar_movies,casts")
+  $routeProvider.when "/collection/:id",
+    controller: "CollectionController"
+    templateUrl: "/collection.htm"
+    resolve:
+      collection: ($route, MovieDB) ->
+        MovieDB.get("/collection/#{$route.current.params.id}")
   $routeProvider.when "/search/*query",
     controller: "SearchResultsController"
     templateUrl: "/search.htm"
@@ -98,6 +104,17 @@ app.controller "MovieController", ($scope, $rootScope, movie, MovieDB) ->
 
   $rootScope.$broadcast 'setFullPageImage', $scope.backdropImage($scope.movie)
 
+  $scope.$on '$destroy', ->
+    $rootScope.$broadcast 'removeFullPageImage'
+
+app.controller "CollectionController", ($scope, $rootScope, collection, MovieDB) ->
+  $scope.collection = collection.data
+
+  for fn in ["posterImage", "backdropImage"]
+    $scope[fn] = MovieDB[fn]
+
+  if $scope.collection.backdrop_path
+    $rootScope.$broadcast 'setFullPageImage', MovieDB.backdropImage($scope.collection.backdrop_path)
   $scope.$on '$destroy', ->
     $rootScope.$broadcast 'removeFullPageImage'
 

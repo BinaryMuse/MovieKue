@@ -1,0 +1,26 @@
+<div class="row collection-details">
+  <div class="large-12 column">
+    <img class="poster" ng-src="{{posterImage(collection.poster_path)}}"
+      ng-show="collection.poster_path">
+    <div>
+      <h2>{{collection.name}}</h2>
+      <p>{{collection.overview}}</p>
+    </div>
+  </div>
+
+  <div class="large-12 column">
+    <h2>Movies</h2>
+  </div>
+
+  <div class="large-12 column">
+    <ul class="large-block-grid-6 movie-list">
+      <li ng-repeat="movie in collection.parts | orderBy:'release_date'">
+        <a ng-href="/movie/{{movie.id}}-{{movie.title | slugify}}">
+          <img class="poster" ng-src="{{posterImage(movie.poster_path)}}">
+        </a>
+        <!-- <h3><a href="/profile/{{member.id}}">{{member.name}}</a></h3> -->
+        <!-- <h4 class='subheader'>{{member.character}}</h4> -->
+      </li>
+    </ul>
+  </div>
+</div>

@@ -91,7 +91,7 @@ img.profile {
   background-position: center;
 }
 
-.movie-details {
+.movie-details, .collection-details {
   h2 {
     margin-bottom: 0;
   }
@@ -126,7 +126,7 @@ img.profile {
     @include clearfix;
   }
 
-  .cast-list {
+  .cast-list, .movie-list {
     margin: 0;
 
     li h3, li h4 {
