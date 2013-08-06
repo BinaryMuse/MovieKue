@@ -139,6 +139,11 @@ app.controller "SearchResultsController", ($scope, movieSearch, collectionSearch
   $scope.collectionSearch = collectionSearch.data
   $scope.personSearch = personSearch.data
 
+  $scope.noResults = ->
+    $scope.movieSearch.results.length == 0 &&
+      $scope.collectionSearch.results.length == 0 &&
+      $scope.personSearch.results.length == 0
+
   for fn in ['posterImage', 'profileImage']
     $scope[fn] = MovieDB[fn]
 

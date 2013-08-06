@@ -1,4 +1,9 @@
 <div class="row">
+  <div class="large-12 columns" ng-show="noResults()">
+    <h2>No Results</h2>
+    <p>Sorry, we couldn't find anything for that query.</p>
+  </div>
+
   <div class="large-12 columns" ng-show="collectionSearch.results.length">
     <h2>Collections</h2>
   </div>
