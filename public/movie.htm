@@ -7,7 +7,7 @@
       <ul class="inline-list">
         <li ng-show="movie.runtime">{{movie.runtime}} minutes</li>
         <li ng-repeat="genre in movie.genres">
-          <a ng-href="/genre/{{genre.id}}-{{genre.name | slugify}}">{{genre.name}}</a>
+          {{genre.name}}
         </li>
       </ul>
       <p>{{movie.overview}}</p>
