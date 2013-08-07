@@ -180,7 +180,6 @@ app.directive 'mkCutoff', ->
 
     scope.$watch 'text', (value) ->
       return unless value?
-      console.log value
       if value.length < scope.max
         scope.truncated = false
 
