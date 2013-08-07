@@ -1,7 +1,7 @@
 <div class="row collection-details">
   <div class="large-12 column">
     <h2>{{collection.name}}</h2>
-    <img class="main-poster" ng-src="{{posterImage(collection.poster_path)}}"
+    <img class="main-poster" ng-src="{{collection.poster_path | posterImage}}"
       ng-show="collection.poster_path">
     <div>
       <p>{{collection.overview}}</p>
@@ -16,7 +16,7 @@
     <ul class="large-block-grid-6 movie-list">
       <li ng-repeat="movie in collection.parts | orderBy:'release_date'">
         <a ng-href="/movie/{{movie.id}}-{{movie.title | slugify}}">
-          <img class="poster" ng-src="{{posterImage(movie.poster_path)}}">
+          <img class="poster" ng-src="{{movie.poster_path | posterImage}}">
         </a>
         <!-- <h3><a href="/profile/{{member.id}}">{{member.name}}</a></h3> -->
         <!-- <h4 class='subheader'>{{member.character}}</h4> -->

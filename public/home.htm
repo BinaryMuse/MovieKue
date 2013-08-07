@@ -7,7 +7,7 @@
   <div class="row poster">
     <div class="large-2 column poster" ng-repeat="movie in collection.movies | limitTo:6">
       <a ng-href="/movie/{{movie.id}}-{{movie.title | slugify}}">
-        <img ng-src="{{posterImage(movie)}}">
+        <img ng-src="{{movie.poster_path | posterImage}}">
       </a>
     </div>
   </div>

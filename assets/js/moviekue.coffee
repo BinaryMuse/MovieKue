@@ -96,45 +96,26 @@ app.factory 'homepageSections', (MovieDB) ->
 
   sections
 
-app.controller "IndexController", ($scope, homepageSections, MovieDB) ->
+app.controller "IndexController", ($scope, homepageSections) ->
   $scope.sections = homepageSections
-
-  $scope.posterImage = (record) ->
-    MovieDB.posterImage(record.poster_path)
 
 app.controller "MovieController", ($scope, $rootScope, movie, MovieDB) ->
   $scope.movie = movie.data
 
-  $scope.posterImage = (record) ->
-    MovieDB.posterImage(record.poster_path)
-
-  $scope.backdropImage = (record) ->
-    MovieDB.backdropImage(record.backdrop_path)
-
-  $scope.profileImage = (record) ->
-    MovieDB.profileImage(record.profile_path)
-
-  $rootScope.$broadcast 'setFullPageImage', $scope.backdropImage($scope.movie)
-
+  $rootScope.$broadcast 'setFullPageImage', MovieDB.backdropImage($scope.movie.backdrop_path)
   $scope.$on '$destroy', ->
     $rootScope.$broadcast 'removeFullPageImage'
 
 app.controller "CollectionController", ($scope, $rootScope, collection, MovieDB) ->
   $scope.collection = collection.data
 
-  for fn in ["posterImage", "backdropImage"]
-    $scope[fn] = MovieDB[fn]
-
   if $scope.collection.backdrop_path
     $rootScope.$broadcast 'setFullPageImage', MovieDB.backdropImage($scope.collection.backdrop_path)
   $scope.$on '$destroy', ->
     $rootScope.$broadcast 'removeFullPageImage'
 
-app.controller "ProfileController", ($scope, $rootScope, profile, MovieDB) ->
+app.controller "ProfileController", ($scope, $rootScope, profile) ->
   $scope.profile = profile.data
-
-  for fn in ["posterImage", "profileImage"]
-    $scope[fn] = MovieDB[fn]
 
   $rootScope.$broadcast 'setFullPageImage', null
   $scope.$on '$destroy', ->
@@ -150,7 +131,7 @@ app.controller "SearchController", ($scope, $location) ->
   $scope.search = ->
     $location.url("/search/#{$scope.query}")
 
-app.controller "SearchResultsController", ($scope, movieSearch, collectionSearch, personSearch, MovieDB) ->
+app.controller "SearchResultsController", ($scope, movieSearch, collectionSearch, personSearch) ->
   $scope.movieSearch = movieSearch.data
   $scope.collectionSearch = collectionSearch.data
   $scope.personSearch = personSearch.data
@@ -159,9 +140,6 @@ app.controller "SearchResultsController", ($scope, movieSearch, collectionSearch
     $scope.movieSearch.results.length == 0 &&
       $scope.collectionSearch.results.length == 0 &&
       $scope.personSearch.results.length == 0
-
-  for fn in ['posterImage', 'profileImage']
-    $scope[fn] = MovieDB[fn]
 
 app.directive 'mkBackgroundImage', ($route, $rootScope) ->
   link: (scope, elem, attrs) ->
@@ -204,6 +182,11 @@ app.directive 'mkCutoff', ->
       return unless value?
       if value.length < scope.max
         scope.truncated = false
+
+for type in ['posterImage', 'profileImage', 'backdropImage']
+  do (type) ->
+    app.filter type, (MovieDB) ->
+      (img) -> MovieDB[type](img)
 
 app.filter 'slugify', ->
   (str) ->

@@ -1,7 +1,7 @@
 <div class="row movie-details">
   <div class="large-12 column main-details-block">
     <h2>{{movie.title}}</h2>
-    <img class="main-poster" ng-src="{{posterImage(movie)}}" width="154">
+    <img class="main-poster" ng-src="{{movie.poster_path | posterImage}}" width="154">
     <div>
       <h4 class='subheader'>{{movie.tagline}}</h4>
       <ul class="inline-list">
@@ -13,7 +13,7 @@
       <p>{{movie.overview}}</p>
       <p ng-if="movie.belongs_to_collection">
         Part of: <a ng-href="/collection/{{movie.belongs_to_collection.id}}-{{movie.belongs_to_collection.name | slugify}}">{{movie.belongs_to_collection.name}}<br>
-        <img ng-src="{{posterImage(movie.belongs_to_collection)}}" ng-show="movie.belongs_to_collection.poster_path"></a>
+        <img ng-src="{{movie.belongs_to_collection.poster_path | posterImage}}" ng-show="movie.belongs_to_collection.poster_path"></a>
       </p>
     </div>
   </div>
@@ -26,7 +26,7 @@
     <ul class="large-block-grid-2 cast-list">
       <li ng-repeat="member in movie.casts.cast | orderBy:'order'">
         <a ng-href="/profile/{{member.id}}-{{member.name | slugify}}">
-          <img class="profile" ng-src="{{profileImage(member)}}">
+          <img class="profile" ng-src="{{member.profile_path | profileImage}}">
         </a>
         <h3><a href="/profile/{{member.id}}">{{member.name}}</a></h3>
         <h4 class='subheader'>{{member.character}}</h4>
@@ -42,7 +42,7 @@
       <ul class="large-block-grid-6">
       <li ng-repeat="movie in movie.similar_movies.results | limitTo:6 | orderBy:'popularity'">
         <a ng-href="/movie/{{movie.id}}-{{movie.title | slugify}}">
-          <img ng-src="{{posterImage(movie)}}">
+          <img ng-src="{{movie.poster_path | posterImage}}">
         </a>
       </li>
     </ul>

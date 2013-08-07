@@ -1,7 +1,7 @@
 <div class="row profile-details">
   <div class="large-12 column main-details-block">
     <h2>{{profile.name}}</h2>
-    <img class="profile" ng-src="{{profileImage(profile.profile_path)}}">
+    <img class="profile" ng-src="{{profile.profile_path | profileImage}}">
     <div>
       <p mk-cutoff="800" mk-cutoff-text="profile.biography"></p>
     </div>
@@ -16,7 +16,7 @@
       <ul class="large-block-grid-6">
         <li ng-repeat="movie in profile.credits.cast | orderBy:'releaseDate'">
           <a ng-href="/movie/{{movie.id}}-{{movie.title | slugify}}">
-            <img class="poster" ng-src="{{posterImage(movie.poster_path)}}">
+            <img class="poster" ng-src="{{movie.poster_path | posterImage}}">
           </a>
         </li>
       </ul>
