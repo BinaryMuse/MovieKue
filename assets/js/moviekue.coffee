@@ -163,13 +163,13 @@ app.directive 'mkCutoff', ->
   scope:
     max: '=mkCutoff'
     text: '=mkCutoffText'
-  template: "<span>{{truncatedText()}}<a class='small' ng-click='more()' ng-hide='!truncated'>show more</a></span>"
+  template: "<span ng-bind-html-unsafe='truncatedText()'></span> <a class='small' ng-click='more()' ng-hide='!truncated'>show more</a>"
   link: (scope, elem, attrs) ->
     scope.truncated = true
 
     scope.truncatedText = ->
       if scope.truncated && scope.text
-        scope.text.substr(0, scope.max) + "... "
+        scope.text.substr(0, scope.max) + "..."
       else if scope.text
         scope.text
       else
@@ -180,6 +180,7 @@ app.directive 'mkCutoff', ->
 
     scope.$watch 'text', (value) ->
       return unless value?
+      console.log value
       if value.length < scope.max
         scope.truncated = false
 
@@ -187,6 +188,10 @@ for type in ['posterImage', 'profileImage', 'backdropImage']
   do (type) ->
     app.filter type, (MovieDB) ->
       (img) -> MovieDB[type](img)
+
+app.filter 'nl2br', ->
+  (str) ->
+    str?.replace(/\n/g, "<br>\n")
 
 app.filter 'slugify', ->
   (str) ->

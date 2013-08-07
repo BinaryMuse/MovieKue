@@ -3,7 +3,7 @@
     <h2>{{profile.name}}</h2>
     <img class="profile" ng-src="{{profile.profile_path | profileImage}}">
     <div ng-show="profile.biography.length">
-      <p mk-cutoff="800" mk-cutoff-text="profile.biography"></p>
+      <p mk-cutoff="800" mk-cutoff-text="profile.biography | nl2br"></p>
     </div>
   </div>
 
