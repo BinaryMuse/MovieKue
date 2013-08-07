@@ -1,0 +1,25 @@
+<div class="row profile-details">
+  <div class="large-12 column main-details-block">
+    <h2>{{profile.name}}</h2>
+    <img class="profile" ng-src="{{profileImage(profile.profile_path)}}">
+    <div>
+      <p mk-cutoff="800" mk-cutoff-text="profile.biography"></p>
+    </div>
+  </div>
+
+  <div ng-show="profile.credits.cast">
+    <div class="large-12 column">
+      <h2>Movies</h2>
+    </div>
+
+    <div class="large-12 column">
+      <ul class="large-block-grid-6">
+        <li ng-repeat="movie in profile.credits.cast | orderBy:'releaseDate'">
+          <a ng-href="/movie/{{movie.id}}-{{movie.title | slugify}}">
+            <img class="poster" ng-src="{{posterImage(movie.poster_path)}}">
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

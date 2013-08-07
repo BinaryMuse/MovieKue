@@ -1,8 +1,8 @@
 <div class="row movie-details">
   <div class="large-12 column main-details-block">
-    <img class="poster" ng-src="{{posterImage(movie)}}" width="154">
+    <h2>{{movie.title}}</h2>
+    <img class="main-poster" ng-src="{{posterImage(movie)}}" width="154">
     <div>
-      <h2>{{movie.title}}</h2>
       <h4 class='subheader'>{{movie.tagline}}</h4>
       <ul class="inline-list">
         <li ng-show="movie.runtime">{{movie.runtime}} minutes</li>

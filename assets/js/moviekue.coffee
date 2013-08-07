@@ -17,6 +17,12 @@ app.config ($routeProvider, $locationProvider) ->
     resolve:
       collection: ($route, MovieDB) ->
         MovieDB.get("/collection/#{$route.current.params.id}")
+  $routeProvider.when "/profile/:id",
+    controller: "ProfileController"
+    templateUrl: "/profile.htm"
+    resolve:
+      profile: ($route, MovieDB) ->
+        MovieDB.get("/person/#{$route.current.params.id}?append_to_response=credits")
   $routeProvider.when "/search/*query",
     controller: "SearchResultsController"
     templateUrl: "/search.htm"
@@ -124,6 +130,16 @@ app.controller "CollectionController", ($scope, $rootScope, collection, MovieDB)
   $scope.$on '$destroy', ->
     $rootScope.$broadcast 'removeFullPageImage'
 
+app.controller "ProfileController", ($scope, $rootScope, profile, MovieDB) ->
+  $scope.profile = profile.data
+
+  for fn in ["posterImage", "profileImage"]
+    $scope[fn] = MovieDB[fn]
+
+  $rootScope.$broadcast 'setFullPageImage', null
+  $scope.$on '$destroy', ->
+    $rootScope.$broadcast 'removeFullPageImage'
+
 app.controller "FullPageController", ($scope) ->
   $scope.$on 'setFullPageImage', (evt, value) ->
     $scope.image = value
@@ -164,6 +180,30 @@ app.directive 'mkBackgroundImage', ($route, $rootScope) ->
 
     scope.$watch attrs.mkBackgroundImage, handler
     scope.$on '$routeChangeSuccess', handler
+
+app.directive 'mkCutoff', ->
+  scope:
+    max: '=mkCutoff'
+    text: '=mkCutoffText'
+  template: "<span>{{truncatedText()}}<a class='small' ng-click='more()' ng-hide='!truncated'>show more</a></span>"
+  link: (scope, elem, attrs) ->
+    scope.truncated = true
+
+    scope.truncatedText = ->
+      if scope.truncated && scope.text
+        scope.text.substr(0, scope.max) + "... "
+      else if scope.text
+        scope.text
+      else
+        ""
+
+    scope.more = ->
+      scope.truncated = false
+
+    scope.$watch 'text', (value) ->
+      return unless value?
+      if value.length < scope.max
+        scope.truncated = false
 
 app.filter 'slugify', ->
   (str) ->

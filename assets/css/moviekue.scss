@@ -4,8 +4,18 @@ $paragraph-text-rendering: auto;
 @import 'normalize.scss';
 @import 'foundation.scss';
 
-html, body {
+html {
   height: 100%;
+  background-color: black;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat no-repeat;
+}
+
+body {
+  background: transparent;
+  min-height: 100%;
 }
 
 * {
@@ -77,22 +87,10 @@ img.profile {
 }
 
 .row.poster {
-  height: 205px;
+  min-height: 205px;
 }
 
-.full-page-background {
-  background-color: black;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-size: cover;
-  z-index: -1;
-  background-position: center;
-}
-
-.movie-details, .collection-details {
+.movie-details, .collection-details, .profile-details {
   h2 {
     margin-bottom: 0;
   }
@@ -109,8 +107,7 @@ img.profile {
     display: inline-block;
   }
 
-  img.poster {
-    margin-top: 1.2em;
+  img.main-poster {
     margin-right: 0.8em;
     margin-bottom: 1.2em;
     float: right;
@@ -135,6 +132,16 @@ img.profile {
       margin: 0;
     }
   }
+}
+
+.profile-details {
+  img.profile {
+    float: right;
+  }
+}
+
+.small {
+  font-size: 80%;
 }
 
 .ajax-loader-container {

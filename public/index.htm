@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="moviekue">
+<html ng-app="moviekue" ng-controller="FullPageController" mk-background-image="image">
 <head>
   <base href="/">
   <title>MovieKue</title>
@@ -9,43 +9,40 @@
   <script type="text/javascript" src="/js/moviekue.js"></script>
 </head>
 <body ng-cloak>
-<div ng-controller="FullPageController" mk-background-image="image" class='full-page-background'></div>
 
-<div class='main'>
-  <div class="row header">
-    <div class="large-5 columns logo-container">
-      <a href="/">
-        <img src="/img/moviekue.png">
-      </a>
-    </div>
-    <div class="large-4 columns header-search" ng-controller="SearchController">
-      <div class="search-box-wrapper">
-        <form ng-submit="search()">
-          <input type="search" placeholder="Search..." ng-model="query">
-          <img src="/img/icons/reel.jpg" class="icon">
-        </form>
-      </div>
-    </div>
-    <div class="large-3 columns header-account">
-      <div>
-        <p>Brandon Tilley &middot; <a href="#">Logout</a></p>
-        <p><a href="#">22 movies in your Kue</a></p>
-      </div>
+<div class="row header">
+  <div class="large-5 columns logo-container">
+    <a href="/">
+      <img src="/img/moviekue.png">
+    </a>
+  </div>
+  <div class="large-4 columns header-search" ng-controller="SearchController">
+    <div class="search-box-wrapper">
+      <form ng-submit="search()">
+        <input type="search" placeholder="Search..." ng-model="query">
+        <img src="/img/icons/reel.jpg" class="icon">
+      </form>
     </div>
   </div>
+  <div class="large-3 columns header-account">
+    <div>
+      <p>Brandon Tilley &middot; <a href="#">Logout</a></p>
+      <p><a href="#">22 movies in your Kue</a></p>
+    </div>
+  </div>
+</div>
 
-  <div ng-controller="RoutingController">
-    <div ng-show="routingProgress" class="row">
-      <div class="large-12 columns ajax-loader-container">
-        <img src="/img/ajax-loader.gif" class="ajax-loader">
-      </div>
+<div ng-controller="RoutingController">
+  <div ng-show="routingProgress" class="row">
+    <div class="large-12 columns ajax-loader-container">
+      <img src="/img/ajax-loader.gif" class="ajax-loader">
     </div>
-    <div ng-hide="routingError || routingProgress">
-      <div ng-view></div>
-    </div>
-    <div ng-show="routingError">
-      <div ng-include="'/error.htm'"></div>
-    </div>
+  </div>
+  <div ng-hide="routingError || routingProgress">
+    <div ng-view></div>
+  </div>
+  <div ng-show="routingError">
+    <div ng-include="'/error.htm'"></div>
   </div>
 </div>
 

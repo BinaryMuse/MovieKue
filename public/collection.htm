@@ -1,9 +1,9 @@
 <div class="row collection-details">
   <div class="large-12 column">
-    <img class="poster" ng-src="{{posterImage(collection.poster_path)}}"
+    <h2>{{collection.name}}</h2>
+    <img class="main-poster" ng-src="{{posterImage(collection.poster_path)}}"
       ng-show="collection.poster_path">
     <div>
-      <h2>{{collection.name}}</h2>
       <p>{{collection.overview}}</p>
     </div>
   </div>
