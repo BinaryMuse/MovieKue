@@ -2,7 +2,7 @@
   <div class="large-12 column main-details-block">
     <h2>{{profile.name}}</h2>
     <img class="profile" ng-src="{{profile.profile_path | profileImage}}">
-    <div>
+    <div ng-show="profile.biography.length">
       <p mk-cutoff="800" mk-cutoff-text="profile.biography"></p>
     </div>
   </div>
