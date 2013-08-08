@@ -1,11 +1,11 @@
 <div class="row">
-  <div class="large-12 columns" ng-show="noResults()">
-    <h2>No Results</h2>
-    <p>Sorry, we couldn't find anything for that query.</p>
+  <div class="large-12 columns">
+    <h2>Search: {{query}}</h2>
+    <p ng-show="noResults()">Sorry, we couldn't find anything for that query.</p>
   </div>
 
   <div class="large-12 columns" ng-show="collectionSearch.results.length">
-    <h2>Collections</h2>
+    <h3>Collections</h3>
   </div>
   <div class="large-12 columns">
     <ul class="large-block-grid-6">
@@ -18,7 +18,7 @@
   </div>
 
   <div class="large-12 columns" ng-show="movieSearch.results.length">
-    <h2>Movies</h2>
+    <h3>Movies</h3>
   </div>
   <div class="large-12 columns">
     <ul class="large-block-grid-6">
@@ -31,7 +31,7 @@
   </div>
 
   <div class="large-12 columns" ng-show="personSearch.results.length">
-    <h2>People</h2>
+    <h3>People</h3>
   </div>
   <div class="large-12 columns">
     <ul class="large-block-grid-6">

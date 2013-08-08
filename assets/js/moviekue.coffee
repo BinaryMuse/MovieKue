@@ -131,7 +131,8 @@ app.controller "SearchController", ($scope, $location) ->
   $scope.search = ->
     $location.url("/search/#{$scope.query}")
 
-app.controller "SearchResultsController", ($scope, movieSearch, collectionSearch, personSearch) ->
+app.controller "SearchResultsController", ($scope, $routeParams, movieSearch, collectionSearch, personSearch) ->
+  $scope.query = $routeParams.query
   $scope.movieSearch = movieSearch.data
   $scope.collectionSearch = collectionSearch.data
   $scope.personSearch = personSearch.data
