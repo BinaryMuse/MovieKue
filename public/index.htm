@@ -5,6 +5,7 @@
   <title>MovieKue</title>
   <link rel="stylesheet" type="text/css" href="/css/moviekue.css">
   <script type="text/javascript" src="https://cdn.firebase.com/v0/firebase.js"></script>
+  <script type="text/javascript" src="https://cdn.firebase.com/v0/firebase-simple-login.js"></script>
   <script type="text/javascript" src="/js/angular.js"></script>
   <script type="text/javascript" src="/js/moviekue.js"></script>
 </head>
@@ -25,9 +26,16 @@
     </div>
   </div>
   <div class="large-3 columns header-account">
-    <div>
-      <p>Brandon Tilley &middot; <a href="#">Logout</a></p>
-      <p><a href="#">22 movies in your Kue</a></p>
+    <div ng-controller="AuthController">
+      <p ng-show="user.loggedIn == false"><a ng-click="login()">Login</a></p>
+      <p ng-show="user.loggedIn == true">{{user.username}} &middot;
+        <a ng-click="logout()">Logout</a>
+      </p>
+      <p ng-show="user.loggedIn == true"><a href="#">
+        <span ng-show="user.list == null">&mdash;</span>
+        <span ng-show="user.list != null">{{user.list.length}}</span>
+          movies in your Kue</a>
+      </p>
     </div>
   </div>
 </div>
