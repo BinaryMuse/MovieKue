@@ -117,7 +117,7 @@ app.factory 'currentUser', ($timeout) ->
       ), 0
 
     loginGithub: =>
-      @auth.login('github', scope: 'user')
+      @auth.login('github')
 
     logout: =>
       @auth.logout()
