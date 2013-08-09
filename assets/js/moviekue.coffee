@@ -33,21 +33,12 @@ app.config ($routeProvider, $locationProvider) ->
         MovieDB.get("/search/collection?query=#{$route.current.params.query}")
       personSearch: ($route, MovieDB) ->
         MovieDB.get("/search/person?query=#{$route.current.params.query}")
+  $routeProvider.when "/kue",
+    controller: "KueController"
+    templateUrl: "/kue.htm"
   $routeProvider.otherwise
     controller: "RoutingController"
     templateUrl: "/error.htm"
-
-app.controller "RoutingController", ($scope) ->
-  $scope.$on '$routeChangeStart', ->
-    $scope.routingProgress = true
-
-  $scope.$on '$routeChangeError', ->
-    $scope.routingError = true
-    $scope.routingProgress = false
-
-  $scope.$on '$routeChangeSuccess', ->
-    $scope.routingError = false
-    $scope.routingProgress = false
 
 app.factory 'MovieDB', ($http) ->
   cache = {}
@@ -157,6 +148,18 @@ app.factory 'currentUser', ($timeout) ->
 
   new User()
 
+app.controller "RoutingController", ($scope) ->
+  $scope.$on '$routeChangeStart', ->
+    $scope.routingProgress = true
+
+  $scope.$on '$routeChangeError', ->
+    $scope.routingError = true
+    $scope.routingProgress = false
+
+  $scope.$on '$routeChangeSuccess', ->
+    $scope.routingError = false
+    $scope.routingProgress = false
+
 app.controller "AuthController", ($scope, currentUser) ->
   $scope.user = currentUser
 
@@ -165,6 +168,26 @@ app.controller "AuthController", ($scope, currentUser) ->
 
 app.controller "IndexController", ($scope, homepageSections) ->
   $scope.sections = homepageSections
+
+app.controller "AddController", ($scope, currentUser) ->
+  $scope.user = currentUser
+
+  $scope.add = (type, item, $event) ->
+    console.log 'adding...'
+    return unless currentUser.loggedIn
+    $event.cancelBubble = true
+    $event.stopPropagation() if $event.stopPropagation
+    currentUser.list.push(type: type, item: item)
+    currentUser.flush()
+
+  $scope.inList = (type, item) ->
+    list = currentUser.list || []
+    for listItem in list
+      return true if listItem.type == type && listItem.item.id == item.id
+    false
+
+  $scope.canAdd = (type, item) ->
+    currentUser.list != null && !$scope.inList(type, item)
 
 app.controller "MovieController", ($scope, $rootScope, movie, MovieDB) ->
   $scope.movie = movie.data
@@ -209,6 +232,13 @@ app.controller "SearchResultsController", ($scope, $routeParams, movieSearch, co
       $scope.collectionSearch.results.length == 0 &&
       $scope.personSearch.results.length == 0
 
+app.controller "KueController", ($scope, currentUser) ->
+  $scope.user = currentUser
+
+  $scope.clearList = ->
+    currentUser.list = []
+    currentUser.flush()
+
 app.directive 'mkBackgroundImage', ($route, $rootScope) ->
   link: (scope, elem, attrs) ->
     handler = ->
@@ -250,6 +280,11 @@ app.directive 'mkCutoff', ->
       return unless value?
       if value.length < scope.max
         scope.truncated = false
+
+app.directive 'mkAddButton', ->
+  template: "<img src='/img/add.png'>"
+  link: (scope, elem, attrs) ->
+    elem.addClass('add-button')
 
 for type in ['posterImage', 'profileImage', 'backdropImage']
   do (type) ->

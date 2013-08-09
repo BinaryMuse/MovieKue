@@ -1,7 +1,14 @@
 <div class="row movie-details">
   <div class="large-12 column main-details-block">
     <h2>{{movie.title}}</h2>
-    <img class="main-poster" ng-src="{{movie.poster_path | posterImage}}" width="154">
+    <div class="add-container main-poster" ng-controller="AddController">
+      <img ng-src="{{movie.poster_path | posterImage}}" width="154"><br>
+      <img src="/img/add-long.png" class="long-add-button"
+        ng-click="add('movie', movie, $event)"
+        ng-show="canAdd('movie', movie)">
+        <div style="text-align: center;"
+          ng-show="inList('movie', movie)">This is in your Kue</div>
+    </div>
     <div>
       <h4 class='subheader'>{{movie.tagline}}</h4>
       <ul class="inline-list">
@@ -12,8 +19,15 @@
       </ul>
       <p>{{movie.overview}}</p>
       <p ng-if="movie.belongs_to_collection">
-        Part of: <a ng-href="/collection/{{movie.belongs_to_collection.id}}-{{movie.belongs_to_collection.name | slugify}}">{{movie.belongs_to_collection.name}}<br>
-        <img ng-src="{{movie.belongs_to_collection.poster_path | posterImage}}" ng-show="movie.belongs_to_collection.poster_path"></a>
+        Part of: <a ng-href="/collection/{{movie.belongs_to_collection.id}}-{{movie.belongs_to_collection.name | slugify}}">{{movie.belongs_to_collection.name}}</a><br>
+        <div class="add-container" ng-controller="AddController">
+          <a mk-add-button
+            ng-click="add('collection', movie.belongs_to_collection, $event)"
+            ng-show="canAdd('collection', movie.belongs_to_collection)"></a>
+          <a ng-href="/collection/{{movie.belongs_to_collection.id}}-{{movie.belongs_to_collection.name | slugify}}">
+            <img ng-src="{{movie.belongs_to_collection.poster_path | posterImage}}">
+          </a>
+        </div>
       </p>
     </div>
   </div>

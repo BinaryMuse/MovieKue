@@ -1,0 +1,33 @@
+<div class="row" ng-show="user.loggedIn == false">
+  <div class="large-12 columns" ng-controller="AuthController">
+    <h2>Log In</h2>
+    <p>Please <a ng-click="login()">log in with GitHub</a> to manage your Kue.</p>
+  </div>
+</div>
+
+<div class="row" ng-show="user.list == null">
+  <div class="large-12 columns">
+    <h2>Loading...</h2>
+  </div>
+</div>
+
+<div class="row" ng-show="user.list != null">
+  <div class="large-12 columns">
+    <h2>Your Kue</h2>
+  </div>
+
+  <div class="large-12 columns">
+    <p ng-show="user.list.length == 0">
+      You have no items in your kue!
+    </p>
+    <ul ng-show="user.list.length > 0">
+      <li ng-repeat="item in user.list">
+        {{item.item.title || item.item.name}}
+      </li>
+    </ul>
+  </div>
+
+  <div class="large-12 columns">
+    <a ng-click="clearList()">Clear List</a>
+  </div>
+</div>

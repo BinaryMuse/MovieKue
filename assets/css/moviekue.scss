@@ -54,6 +54,42 @@ img.profile {
   width: 150px;
 }
 
+.add-container {
+  display: inline-block;
+  position: relative;
+
+  .long-add-button {
+    height: 40px;
+    width: 175px;
+    cursor: pointer;
+  }
+
+  .add-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: white;
+    cursor: pointer;
+
+    img {
+      width: 35px;
+      height: 35px;
+      opacity: 0.0;
+      @include transition(all, 100ms, linear);
+    }
+  }
+
+  &:hover {
+    .add-button img {
+      opacity: 0.4;
+    }
+  }
+
+  .add-button img:hover {
+    opacity: 1.0;
+  }
+}
+
 .header-search {
   height: 100px;
   position: relative;
@@ -123,9 +159,10 @@ img.profile {
     display: inline-block;
   }
 
-  img.main-poster {
+  .main-poster {
     margin-right: 0.8em;
     margin-bottom: 1.2em;
+    text-align: right;
     float: right;
   }
 

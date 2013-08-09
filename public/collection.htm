@@ -1,8 +1,15 @@
 <div class="row collection-details">
   <div class="large-12 column">
     <h2>{{collection.name}}</h2>
-    <img class="main-poster" ng-src="{{collection.poster_path | posterImage}}"
-      ng-show="collection.poster_path">
+    <div class="add-container main-poster" ng-controller="AddController">
+      <img ng-src="{{collection.poster_path | posterImage}}"
+      ng-show="collection.poster_path"><br>
+      <img src="/img/add-long.png" class="long-add-button"
+        ng-click="add('collection', collection, $event)"
+        ng-show="canAdd('collection', collection)">
+        <div style="text-align: center;"
+          ng-show="inList('collection', collection)">This is in your Kue</div>
+    </div>
     <div>
       <p>{{collection.overview}}</p>
     </div>

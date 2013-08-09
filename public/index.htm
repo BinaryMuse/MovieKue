@@ -27,14 +27,15 @@
   </div>
   <div class="large-3 columns header-account">
     <div ng-controller="AuthController">
-      <p ng-show="user.loggedIn == false"><a ng-click="login()">Login</a></p>
+      <p ng-show="user.loggedIn == false"><a ng-click="login()">Log In</a></p>
       <p ng-show="user.loggedIn == true">{{user.username}} &middot;
         <a ng-click="logout()">Logout</a>
       </p>
-      <p ng-show="user.loggedIn == true"><a href="#">
+      <p ng-show="user.loggedIn == true"><a href="/kue">
         <span ng-show="user.list == null">&mdash;</span>
         <span ng-show="user.list != null">{{user.list.length}}</span>
-          movies in your Kue</a>
+        <span ng-pluralize count="user.list.length"
+          when="{'1': 'movie', other: 'movies'}"></span> in your Kue</a>
       </p>
     </div>
   </div>
