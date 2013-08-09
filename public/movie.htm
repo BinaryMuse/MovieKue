@@ -18,7 +18,7 @@
         </li>
       </ul>
       <p>{{movie.overview}}</p>
-      <p ng-if="movie.belongs_to_collection">
+      <div ng-if="movie.belongs_to_collection">
         Part of: <a ng-href="/collection/{{movie.belongs_to_collection.id}}-{{movie.belongs_to_collection.name | slugify}}">{{movie.belongs_to_collection.name}}</a><br>
         <div class="add-container" ng-controller="AddController">
           <a mk-add-button
@@ -28,7 +28,7 @@
             <img ng-src="{{movie.belongs_to_collection.poster_path | posterImage}}">
           </a>
         </div>
-      </p>
+      </div>
     </div>
   </div>
 
