@@ -200,12 +200,21 @@ ul.kue-list {
     padding: 0.25em;
   }
 
+  li:nth-child(2n) {
+    background-color: #eee;
+  }
+
+  li:nth-child(2n+1) {
+    background-color: #ddd;
+  }
+
   li:last-child {
     border-bottom: 1px solid #ccc;
   }
 
   .remove-button {
     float: right;
+    margin-right: 5px;
   }
 }
 
