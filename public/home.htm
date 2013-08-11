@@ -4,7 +4,7 @@
   </div>
 
   <div class="row poster">
-    <div class="large-2 column" ng-repeat="movie in collection.pager.currentPage()">
+    <div class="large-2 column" ng-repeat="movie in collection.pager.currentPage()" ng-animate="{enter: 'fade-in'}">
       <a ng-href="/movie/{{movie.id}}-{{movie.title | slugify}}">
         <img ng-src="{{movie.poster_path | posterImage}}">
       </a>
