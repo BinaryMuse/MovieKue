@@ -191,6 +191,24 @@ img.profile {
   }
 }
 
+ul.kue-list {
+  list-style: none;
+
+  li {
+    border: 1px solid #ccc;
+    border-bottom: none;
+    padding: 0.25em;
+  }
+
+  li:last-child {
+    border-bottom: 1px solid #ccc;
+  }
+
+  .remove-button {
+    float: right;
+  }
+}
+
 .profile-details {
   img.profile {
     float: right;
@@ -207,4 +225,22 @@ img.profile {
   .ajax-loader {
     padding: 100px;
   }
+}
+
+.fade-out, .fade-hide {
+  opacity: 1.0;
+  @include transition(opacity, 500ms, linear);
+}
+
+.fade-out.fade-out-active, .fade-hide.fade-hide-active {
+  opacity: 0.0;
+}
+
+.fade-in, .fade-enter {
+  opacity: 0.0;
+  @include transition(opacity, 500ms, linear);
+}
+
+.fade-in.fade-in-active, .fade-enter.fade-enter-active {
+  opacity: 1.0;
 }

@@ -5,29 +5,36 @@
   </div>
 </div>
 
-<div class="row" ng-show="user.list == null">
+<div class="row" ng-show="user.loggedIn && user.list == null">
   <div class="large-12 columns">
     <h2>Loading...</h2>
   </div>
 </div>
 
-<div class="row" ng-show="user.list != null">
+<div class="row" ng-show="user.loggedIn && user.list != null">
   <div class="large-12 columns">
     <h2>Your Kue</h2>
   </div>
 
   <div class="large-12 columns">
-    <p ng-show="user.list.length == 0">
+    <p ng-show="user.list.length == 0" ng-animate="{show: 'fade-in'}">
       You have no items in your kue!
     </p>
-    <ul ng-show="user.list.length > 0">
-      <li ng-repeat="item in user.list">
-        {{item.item.title || item.item.name}}
+
+    <ul class="kue-list">
+      <li ng-repeat="item in user.list track by item.key"
+        ng-animate="{leave: 'fade-out'}">
+        <a ng-href="/{{item.type}}/{{item.item.id}}-{{item.item.title | slugify}}">
+          {{item.item.title || item.item.name}}
+        </a>
+        <span class="remove-button">
+          <a ng-click="remove(item)">&#x2717;</a>
+        </span>
       </li>
     </ul>
   </div>
 
-  <div class="large-12 columns">
-    <a ng-click="clearList()">Clear List</a>
+  <div class="large-12 columns" ng-show="user.list.length > 0">
+    <p><a ng-click="clearList()">Clear Kue</a></p>
   </div>
 </div>

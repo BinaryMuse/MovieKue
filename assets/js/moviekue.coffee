@@ -255,7 +255,14 @@ app.controller "AddController", ($scope, currentUser) ->
     return unless currentUser.loggedIn
     $event.cancelBubble = true
     $event.stopPropagation() if $event.stopPropagation
-    currentUser.list.push(type: type, item: item)
+    itemDetails =
+      backdrop_path: item.backdrop_path
+      id: item.id
+      imdb_id: item.imdb_id
+      poster_path: item.poster_path
+      title: item.title || item.name # movie = title, collection = name
+      tagline: item.tagline
+    currentUser.list.push(key: "#{type}-#{item.id}", type: type, item: itemDetails)
     currentUser.flush()
 
   $scope.inList = (type, item) ->
@@ -312,6 +319,14 @@ app.controller "SearchResultsController", ($scope, $routeParams, movieSearch, co
 
 app.controller "KueController", ($scope, currentUser) ->
   $scope.user = currentUser
+
+  $scope.remove = (item) ->
+    index = null
+    for existingItem, index in currentUser.list
+      if item.type == existingItem.type && item.id == existingItem.id
+        currentUser.list.splice(index, 1)
+        currentUser.flush()
+        return
 
   $scope.clearList = ->
     currentUser.list = []
