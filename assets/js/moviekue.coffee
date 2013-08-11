@@ -67,23 +67,103 @@ app.factory 'MovieDB', ($http) ->
     else
       cache[url] = $http.get(url)
 
-app.factory 'homepageSections', (MovieDB) ->
+app.factory 'MovieDBPager', (MovieDB, $q) ->
+  class MovieDBPager
+    constructor: (@url, @perPage, @maxPages = 20) ->
+      throw new Error("You must specify a perPage option") unless @perPage?
+
+      @ready = false
+      @_requests =
+        1: @_makeRequest(1)
+      @_pages = {}
+      @_items = {}
+
+      @currentPageNum = 1
+      @totalPages = null
+      @eachPage = null
+
+      @_init()
+
+    page: (page) =>
+      return @_pages[page] if @_pages[page]?
+      @_pages[page] = []
+
+      @_metadata().then (metadata) =>
+        itemStartIndex = @perPage * (page - 1)
+        itemEndIndex = itemStartIndex + @perPage - 1
+
+        requestStartIndex = Math.floor(itemStartIndex / metadata.perRequest) + 1
+        requestEndIndex = Math.floor(itemEndIndex / metadata.perRequest) + 1
+        requests = (@_request(i) for i in [requestStartIndex..requestEndIndex])
+        $q.all(requests).then =>
+          items = (@_item(i) for i in [itemStartIndex..itemEndIndex])
+          angular.copy(items, @_pages[page])
+
+      @_pages[page]
+
+    currentPage: =>
+      @page(@currentPageNum)
+
+    nextPage: =>
+      return if @currentPageNum == @totalPages
+      @changePage(@currentPageNum + 1)
+
+    previousPage: =>
+      return if @currentPageNum == 1
+      @changePage(@currentPageNum - 1)
+
+    changePage: (page) =>
+      @currentPageNum = page
+
+    _init: =>
+      @_metadata().then (metadata) =>
+        totalPages = Math.floor(metadata.totalItems / @perPage)
+        @totalPages = Math.min(totalPages, @maxPages)
+        @eachPage = [1..@totalPages]
+        @ready = true
+
+    _request: (num) =>
+      @_requests[num] ?= @_makeRequest(num)
+
+    _makeRequest: (num) =>
+      MovieDB.get(@url.replace("PAGENUM", num))
+
+    _item: (index) =>
+      return @_items[index] if @_items[index]
+      d = $q.defer()
+      @_metadata().then (metadata) =>
+        request = Math.floor(index / metadata.perRequest)
+        position = index % metadata.perRequest
+        @_request(request + 1).success (data) =>
+          d.resolve(data.results[position])
+      @_items[index] = d.promise
+
+    _metadata: =>
+      return @_metadataPromise if @_metadataPromise?
+      d = $q.defer()
+      @_request(1).success (data) ->
+        result =
+          perRequest: data.results.length
+          totalRequests: data.total_pages
+          totalItems: data.total_results
+        d.resolve(result)
+      @_request(1).error (data) -> d.reject(data)
+      @_metadataPromise = d.promise
+
+app.factory 'homepageSections', (MovieDBPager) ->
   sections =
     popular:
       title: "Popular Now"
-      url: "/movie/popular"
+      url: "/movie/popular?page=PAGENUM"
     top_rated:
       title: "Top Rated"
-      url: "/movie/top_rated"
+      url: "/movie/top_rated?page=PAGENUM"
     now_playing:
       title: "In Theaters"
-      url: "/movie/now_playing"
+      url: "/movie/now_playing?page=PAGENUM"
 
   for key, section of sections
-    do (section) ->
-      section.movies = []
-      MovieDB.get(section.url).success (data) ->
-        angular.copy(data.results, section.movies)
+    section.pager = new MovieDBPager(section.url, 6)
 
   sections
 
@@ -129,7 +209,6 @@ app.factory 'currentUser', ($timeout) ->
       @loggedIn = true
       @userData = user
       @username = user.displayName || user.username || user.email
-      console.log "auth", @userData
 
       myKey = "lists/#{@userData.provider}-#{@userData.id}"
       @myRef = @ref.child(myKey)
@@ -173,7 +252,6 @@ app.controller "AddController", ($scope, currentUser) ->
   $scope.user = currentUser
 
   $scope.add = (type, item, $event) ->
-    console.log 'adding...'
     return unless currentUser.loggedIn
     $event.cancelBubble = true
     $event.stopPropagation() if $event.stopPropagation

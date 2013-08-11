@@ -1,14 +1,33 @@
 <div ng-repeat="(key, collection) in sections">
   <div class="row">
-    <div class="large-12 columns">
-      <h2>{{collection.title}}</h2>
-    </div>
+    <div class="large-12 column"><h2>{{collection.title}}</h2></div>
   </div>
+
   <div class="row poster">
-    <div class="large-2 column poster" ng-repeat="movie in collection.movies | limitTo:6">
+    <div class="large-2 column" ng-repeat="movie in collection.pager.currentPage()">
       <a ng-href="/movie/{{movie.id}}-{{movie.title | slugify}}">
         <img ng-src="{{movie.poster_path | posterImage}}">
       </a>
+    </div>
+  </div>
+
+  <div class="row with-pagination">
+    <div class="pagination-centered" ng-hide="collection.pager.ready">
+      <span>...</span>
+    </div>
+    <div class="pagination-centered" ng-show="collection.pager.ready">
+      <ul class="pagination centered">
+        <li ng-class="{arrow: true, unavailable: $index == 0}">
+        <a ng-click="collection.pager.previousPage()">&laquo;</a></li>
+
+        <li ng-repeat="page in collection.pager.eachPage"
+        ng-class="{current: $index + 1 == collection.pager.currentPageNum}">
+        <a ng-click="collection.pager.changePage(page)">{{page}}</a>
+        </li>
+
+        <li ng-class="{arrow: true, unavailable: $index == collection.pager.totalPages - 1}">
+        <a ng-click="collection.pager.nextPage()">&raquo;</a></li>
+      </ul>
     </div>
   </div>
 </div>

@@ -40,6 +40,10 @@ body {
 
 .row {
   background-color: rgba(255, 255, 255, 0.85);
+
+  &.with-pagination {
+    padding-top: 0.5em;
+  }
 }
 
 .logo-container {
@@ -152,7 +156,7 @@ img.profile {
   }
 
   p {
-    margin-right: 180px;
+    margin-right: 200px;
   }
 
   .inline-list {
