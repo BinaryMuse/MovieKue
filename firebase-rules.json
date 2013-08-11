@@ -1,0 +1,11 @@
+{
+  "rules": {
+    "lists": {
+      "$user": {
+        ".read": "data.hasChildren(['login_provider', 'login_id']) && data.child('login_provider').val() == auth.provider && data.child('login_id').val() == auth.id",
+        ".write": "!data.exists() || (data.child('login_provider').val() == auth.provider && data.child('login_id').val() == auth.id)",
+        ".validate": "newData.child('login_provider').val() == auth.provider && newData.child('login_id').val() == auth.id"
+      }
+    }
+  }
+}
