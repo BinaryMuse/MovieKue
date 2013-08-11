@@ -19,6 +19,7 @@ app.set "config", configuration("./config/config.json", "default", app.get("env"
 app.set "port", process.env.PORT || 3000
 
 app.use errors()
+app.use express.compress()
 app.use express.favicon()
 app.use express.logger("dev")
 app.use express.bodyParser()
@@ -33,7 +34,8 @@ if app.get("env") == "production"
   console.log "Skipping SASS middleware in production (precompilation required)..."
   app.use assets.coffee(assetPath, publicPath, true)
 
-app.use express.static(publicPath)
+app.use express.staticCache(maxObjects: 32, maxLength: 1024)
+app.use express.static(publicPath, maxAge: 1000 * 60 * 60)
 app.use app.router
 app.use express.errorHandler() if app.get("env") == "development"
 
