@@ -321,12 +321,11 @@ app.controller "KueController", ($scope, currentUser) ->
   $scope.user = currentUser
 
   $scope.remove = (item) ->
-    index = null
-    for existingItem, index in currentUser.list
-      if item.type == existingItem.type && item.id == existingItem.id
-        currentUser.list.splice(index, 1)
-        currentUser.flush()
-        return
+    index = currentUser.list.indexOf(item)
+    if index != -1
+      currentUser.list.splice(index, 1)
+      currentUser.flush()
+      return
 
   $scope.clearList = ->
     currentUser.list = []
