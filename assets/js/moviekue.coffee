@@ -1,5 +1,7 @@
 app = angular.module "moviekue", []
 
+app.value 'firebaseUrl', 'https://moviekue.firebaseio.com/'
+
 app.config ($routeProvider, $locationProvider) ->
   $locationProvider.html5Mode(true)
   $routeProvider.when "/",
@@ -167,10 +169,10 @@ app.factory 'homepageSections', (MovieDBPager) ->
 
   sections
 
-app.factory 'currentUser', ($timeout) ->
+app.factory 'currentUser', ($timeout, firebaseUrl) ->
   class User
     constructor: ->
-      @ref = new Firebase("https://moviekue.firebaseio.com/")
+      @ref = new Firebase(firebaseUrl)
       @auth = new FirebaseSimpleLogin(@ref, @_handleLoginStateChange)
       @myRef = null
       @loggedIn = undefined
