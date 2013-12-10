@@ -18,5 +18,8 @@
     "extend": "~1.1.3",
     "request": "~2.25.0"
   },
+  "engines": {
+    "node": "0.10.x"
+  },
   "private": true
 }
