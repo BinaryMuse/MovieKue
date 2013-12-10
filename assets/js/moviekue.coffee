@@ -254,6 +254,19 @@ app.factory 'movieList', (currentUser) ->
   canAdd: (type, item) ->
     currentUser.list != null && !@inList(type, item)
 
+app.factory 'backgroundImage', ->
+  class BackgroundImage
+    constructor: ->
+      @url = null
+
+    set: (img) =>
+      @url = img
+
+    remove: =>
+      @set(null)
+
+  new BackgroundImage
+
 app.controller "RoutingController", ($scope) ->
   $scope.$on '$routeChangeStart', ->
     $scope.routingProgress = true
@@ -278,33 +291,27 @@ app.controller "IndexController", ($scope, homepageSections) ->
 app.controller "AddController", ($scope, movieList) ->
   $scope.movieList = movieList
 
-app.controller "MovieController", ($scope, $rootScope, movie, MovieDB) ->
+app.controller "MovieController", ($scope, backgroundImage, movie, MovieDB) ->
   $scope.movie = movie.data
 
-  $rootScope.$broadcast 'setFullPageImage', MovieDB.backdropImage($scope.movie.backdrop_path)
+  backgroundImage.set MovieDB.backdropImage($scope.movie.backdrop_path)
   $scope.$on '$destroy', ->
-    $rootScope.$broadcast 'removeFullPageImage'
+    backgroundImage.remove()
 
-app.controller "CollectionController", ($scope, $rootScope, collection, MovieDB) ->
+app.controller "CollectionController", ($scope, backgroundImage, collection, MovieDB) ->
   $scope.collection = collection.data
 
   if $scope.collection.backdrop_path
-    $rootScope.$broadcast 'setFullPageImage', MovieDB.backdropImage($scope.collection.backdrop_path)
+    backgroundImage.set MovieDB.backdropImage($scope.collection.backdrop_path)
   $scope.$on '$destroy', ->
-    $rootScope.$broadcast 'removeFullPageImage'
+    backgroundImage.remove()
 
-app.controller "ProfileController", ($scope, $rootScope, profile) ->
+app.controller "ProfileController", ($scope, backgroundImage, profile) ->
   $scope.profile = profile.data
+  backgroundImage.remove()
 
-  $rootScope.$broadcast 'setFullPageImage', null
-  $scope.$on '$destroy', ->
-    $rootScope.$broadcast 'removeFullPageImage'
-
-app.controller "FullPageController", ($scope) ->
-  $scope.$on 'setFullPageImage', (evt, value) ->
-    $scope.image = value
-  $scope.$on 'removeFullPageImage', ->
-    $scope.image = null
+app.controller "FullPageController", ($scope, backgroundImage) ->
+  $scope.backgroundImage = backgroundImage
 
 app.controller "SearchController", ($scope, $location) ->
   $scope.search = ->
@@ -335,11 +342,11 @@ app.controller "KueController", ($scope, currentUser) ->
     currentUser.list = []
     currentUser.flush()
 
-app.directive 'mkBackgroundImage', ($route, $rootScope) ->
+app.directive 'mkBackgroundImage', ($route) ->
   link: (scope, elem, attrs) ->
     handler = ->
       firstRoute = true
-      value = scope[attrs.mkBackgroundImage]
+      value = scope.$eval(attrs.mkBackgroundImage)
 
       if $route.current == undefined && firstRoute
         elem.css('background-image': "none")
