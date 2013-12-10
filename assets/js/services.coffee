@@ -27,6 +27,18 @@ app.factory 'MovieDB', ($http) ->
     else
       cache[url] = $http.get(url)
 
+  getMovie: (movie) ->
+    @get "/movie/#{movie}?append_to_response=trailers,similar_movies,casts"
+
+  getCollection: (collection) ->
+    @get "/collection/#{collection}"
+
+  getPerson: (person) ->
+    @get "/person/#{person}?append_to_response=credits"
+
+  getSearch: (type, query) ->
+    @get "/search/#{type}?query=#{query}"
+
 app.factory 'MovieDBPager', (MovieDB, $q) ->
   class MovieDBPager
     constructor: (@url, @perPage, @maxPages = 20) ->

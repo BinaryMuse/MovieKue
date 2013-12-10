@@ -12,32 +12,32 @@ app.config ($routeProvider, $locationProvider) ->
     templateUrl: "/movie.htm"
     resolve:
       movie: ($route, MovieDB) ->
-        MovieDB.get("/movie/#{$route.current.params.id}?append_to_response=trailers,similar_movies,casts")
+        MovieDB.getMovie($route.current.params.id)
 
   $routeProvider.when "/collection/:id",
     controller: "CollectionController"
     templateUrl: "/collection.htm"
     resolve:
       collection: ($route, MovieDB) ->
-        MovieDB.get("/collection/#{$route.current.params.id}")
+        MovieDB.getCollection($route.current.params.id)
 
   $routeProvider.when "/profile/:id",
     controller: "ProfileController"
     templateUrl: "/profile.htm"
     resolve:
       profile: ($route, MovieDB) ->
-        MovieDB.get("/person/#{$route.current.params.id}?append_to_response=credits")
+        MovieDB.getPerson($route.current.params.id)
 
   $routeProvider.when "/search/*query",
     controller: "SearchResultsController"
     templateUrl: "/search.htm"
     resolve:
       movieSearch: ($route, MovieDB) ->
-        MovieDB.get("/search/movie?query=#{$route.current.params.query}")
+        MovieDB.getSearch 'movie', $route.current.params.query
       collectionSearch: ($route, MovieDB) ->
-        MovieDB.get("/search/collection?query=#{$route.current.params.query}")
+        MovieDB.getSearch 'collection', $route.current.params.query
       personSearch: ($route, MovieDB) ->
-        MovieDB.get("/search/person?query=#{$route.current.params.query}")
+        MovieDB.getSearch 'person', $route.current.params.query
 
   $routeProvider.when "/kue",
     controller: "KueController"
