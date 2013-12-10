@@ -2,21 +2,27 @@ app = angular.module "moviekue"
 
 app.directive 'mkBackgroundImage', ($route) ->
   link: (scope, elem, attrs) ->
+    firstLoad = true
     handler = ->
-      firstRoute = true
       value = scope.$eval(attrs.mkBackgroundImage)
 
-      if $route.current == undefined && firstRoute
+      # Avoid showing the curtain image and then immediately
+      # switching to another image on the first route change
+      if $route.current == undefined && firstLoad
+        console.log '1'
         elem.css('background-image': "none")
       else if value
+        console.log '2'
         elem.css('background-image': "url(#{value})")
-        firstRoute = false
+        firstLoad = false
       else
+        console.log '3'
         elem.css('background-image': 'url(/img/curtain-bg.jpg)')
-        firstRoute = false
+        firstLoad = false
 
     scope.$watch attrs.mkBackgroundImage, handler
     scope.$on '$routeChangeSuccess', handler
+    scope.$on '$routeChangeError', handler
 
 app.directive 'mkCutoff', ->
   scope:
