@@ -41,8 +41,3 @@ app.directive 'mkCutoff', ->
       return unless value?
       if value.length < scope.max
         scope.truncated = false
-
-app.directive 'mkAddButton', ->
-  template: "<img src='/img/add.png'>"
-  link: (scope, elem, attrs) ->
-    elem.addClass('add-button')
