@@ -5,6 +5,7 @@
   "main": "index.coffee",
   "repository": "https://github.com/BinaryMuse/MovieKue.git",
   "scripts": {
+    "start": "cake server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Brandon Tilley <brandon@brandontilley.com>",
