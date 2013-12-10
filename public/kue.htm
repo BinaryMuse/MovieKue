@@ -28,13 +28,13 @@
           {{item.item.title || item.item.name}}
         </a>
         <span class="remove-button">
-          <a ng-click="remove(item)">&#x2717;</a>
+          <a ng-click="movieList.remove(item)">&#x2717;</a>
         </span>
       </li>
     </ul>
   </div>
 
   <div class="large-12 columns" ng-show="user.list.length > 0">
-    <p><a ng-click="clearList()">Clear Kue</a></p>
+    <p><a ng-click="movieList.clearList()">Clear Kue</a></p>
   </div>
 </div>

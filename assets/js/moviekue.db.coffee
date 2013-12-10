@@ -1,6 +1,45 @@
-app = angular.module "moviekue"
+mod = angular.module 'moviekue.db', []
 
-app.factory 'MovieDB', ($http) ->
+
+mod.controller "IndexController", ($scope, homepageSections) ->
+  $scope.sections = homepageSections
+
+
+mod.controller "MovieController", ($scope, backgroundImage, movie, MovieDB) ->
+  $scope.movie = movie.data
+
+  backgroundImage.set MovieDB.backdropImage($scope.movie.backdrop_path)
+  $scope.$on '$destroy', ->
+    backgroundImage.remove()
+
+
+mod.controller "CollectionController", ($scope, backgroundImage, collection, MovieDB) ->
+  $scope.collection = collection.data
+
+  if $scope.collection.backdrop_path
+    backgroundImage.set MovieDB.backdropImage($scope.collection.backdrop_path)
+  $scope.$on '$destroy', ->
+    backgroundImage.remove()
+
+
+mod.controller "ProfileController", ($scope, backgroundImage, profile) ->
+  $scope.profile = profile.data
+  backgroundImage.remove()
+
+
+mod.controller "SearchResultsController", ($scope, $routeParams, movieSearch, collectionSearch, personSearch) ->
+  $scope.query = $routeParams.query
+  $scope.movieSearch = movieSearch.data
+  $scope.collectionSearch = collectionSearch.data
+  $scope.personSearch = personSearch.data
+
+  $scope.noResults = ->
+    $scope.movieSearch.results.length == 0 &&
+      $scope.collectionSearch.results.length == 0 &&
+      $scope.personSearch.results.length == 0
+
+
+mod.factory 'MovieDB', ($http) ->
   cache = {}
   posterImage: (img) ->
     if img
@@ -39,7 +78,8 @@ app.factory 'MovieDB', ($http) ->
   getSearch: (type, query) ->
     @get "/search/#{type}?query=#{query}"
 
-app.factory 'MovieDBPager', (MovieDB, $q) ->
+
+mod.factory 'MovieDBPager', (MovieDB, $q) ->
   class MovieDBPager
     constructor: (@url, @perPage, @maxPages = 20) ->
       throw new Error("You must specify a perPage option") unless @perPage?
@@ -122,7 +162,8 @@ app.factory 'MovieDBPager', (MovieDB, $q) ->
       @_request(1).error (data) -> d.reject(data)
       @_metadataPromise = d.promise
 
-app.factory 'homepageSections', (MovieDBPager) ->
+
+mod.factory 'homepageSections', (MovieDBPager) ->
   sections =
     popular:
       title: "Popular Now"
@@ -139,100 +180,8 @@ app.factory 'homepageSections', (MovieDBPager) ->
 
   sections
 
-app.factory 'currentUser', ($timeout, firebaseUrl) ->
-  class User
-    constructor: ->
-      @ref = new Firebase(firebaseUrl)
-      @auth = new FirebaseSimpleLogin(@ref, @_handleLoginStateChange)
-      @myRef = null
-      @loggedIn = undefined
-      @userData = null
-      @list = null
 
-    _handleLoginStateChange: (error, user) =>
-      $timeout (=>
-        if user
-          @_onLogin(user)
-        else if error
-          @_onLogout()
-        else
-          @_onLogout()
-      ), 0
-
-    loginGithub: =>
-      @auth.login('github')
-
-    logout: =>
-      @auth.logout()
-
-    flush: =>
-      return unless @loggedIn
-      @myRef.update(data: JSON.stringify(@list))
-
-    _onLogout: =>
-      @loggedIn = false
-      @userData = null
-      @myRef?.child('data')?.off('value', @_onDataChange)
-      @myRef = null
-      @list = []
-      @username = ""
-
-    _onLogin: (user) =>
-      @loggedIn = true
-      @userData = user
-      @username = user.displayName || user.username || user.email
-
-      myKey = "lists/#{@userData.provider}-#{@userData.id}"
-      @myRef = @ref.child(myKey)
-      @myRef.update(login_provider: @userData.provider, login_id: @userData.id)
-      @myRef.child('data').on('value', @_onDataChange)
-
-    _onDataChange: (snapshot) =>
-      $timeout (=>
-        json = snapshot.val()
-        if json?
-          @list = JSON.parse(json) || [] # in case of persisted "null"
-        else
-          @list = []
-          @myRef.update(data: '[]')
-      ), 0
-
-  new User()
-
-app.factory 'movieList', (currentUser) ->
-  add: (type, item, $event) ->
-    return unless currentUser.loggedIn
-    if $event?
-      $event.cancelBubble = true
-      $event.stopPropagation() if $event.stopPropagation
-    itemDetails =
-      backdrop_path: item.backdrop_path
-      id: item.id
-      imdb_id: item.imdb_id
-      poster_path: item.poster_path
-      title: item.title || item.name # movie = title, collection = name
-      tagline: item.tagline
-    currentUser.list.push(key: "#{type}-#{item.id}", type: type, item: itemDetails)
-    currentUser.flush()
-
-  inList: (type, item) ->
-    list = currentUser.list || []
-    for listItem in list
-      return true if listItem.type == type && listItem.item.id == item.id
-    false
-
-  canAdd: (type, item) ->
-    currentUser.list != null && !@inList(type, item)
-
-app.factory 'backgroundImage', ->
-  class BackgroundImage
-    constructor: ->
-      @url = null
-
-    set: (img) =>
-      @url = img
-
-    remove: =>
-      @set(null)
-
-  new BackgroundImage
+for type in ['posterImage', 'profileImage', 'backdropImage']
+  do (type) ->
+    mod.filter type, (MovieDB) ->
+      (img) -> MovieDB[type](img)
