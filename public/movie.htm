@@ -4,10 +4,10 @@
     <div class="add-container main-poster" ng-controller="AddController">
       <img ng-src="{{movie.poster_path | posterImage}}" width="154"><br>
       <img src="/img/add-long.png" class="long-add-button"
-        ng-click="add('movie', movie, $event)"
-        ng-show="canAdd('movie', movie)">
+        ng-click="movieList.add('movie', movie, $event)"
+        ng-show="movieList.canAdd('movie', movie)">
         <div style="text-align: center;"
-          ng-show="inList('movie', movie)">This is in your Kue</div>
+          ng-show="movieList.inList('movie', movie)">This is in your Kue</div>
     </div>
     <div>
       <h4 class='subheader'>{{movie.tagline}}</h4>
@@ -22,8 +22,8 @@
         Part of: <a ng-href="/collection/{{movie.belongs_to_collection.id}}-{{movie.belongs_to_collection.name | slugify}}">{{movie.belongs_to_collection.name}}</a><br>
         <div class="add-container" ng-controller="AddController">
           <a mk-add-button
-            ng-click="add('collection', movie.belongs_to_collection, $event)"
-            ng-show="canAdd('collection', movie.belongs_to_collection)"></a>
+            ng-click="movieList.add('collection', movie.belongs_to_collection, $event)"
+            ng-show="movieList.canAdd('collection', movie.belongs_to_collection)"></a>
           <a ng-href="/collection/{{movie.belongs_to_collection.id}}-{{movie.belongs_to_collection.name | slugify}}">
             <img ng-src="{{movie.belongs_to_collection.poster_path | posterImage}}">
           </a>

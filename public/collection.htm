@@ -5,10 +5,10 @@
       <img ng-src="{{collection.poster_path | posterImage}}"
       ng-show="collection.poster_path"><br>
       <img src="/img/add-long.png" class="long-add-button"
-        ng-click="add('collection', collection, $event)"
-        ng-show="canAdd('collection', collection)">
+        ng-click="movieList.add('collection', collection, $event)"
+        ng-show="movieList.canAdd('collection', collection)">
         <div style="text-align: center;"
-          ng-show="inList('collection', collection)">This is in your Kue</div>
+          ng-show="movieList.inList('collection', collection)">This is in your Kue</div>
     </div>
     <div>
       <p>{{collection.overview}}</p>
